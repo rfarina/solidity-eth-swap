@@ -8,6 +8,12 @@ pragma solidity ^0.5.16;
 
 /// @title ERC20 Contract 
 
+/* 
+Token.sol will generate tokens for itself. 
+But our objective is to transfer the tokens created to the EthSwap contract. This will be done
+in the 2_deploy_contracts.js file. 
+*/
+
 contract Token {
 
     // My Variables

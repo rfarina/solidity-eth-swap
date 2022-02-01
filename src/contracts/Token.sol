@@ -20,7 +20,14 @@ contract Token {
     string public name = 'DApp Token';
     string public symbol = 'DAPP';
     uint256 public decimals = 18;
+    
+    // Note 1 wei is 18 decimal places 
+    // 1000000000000000000       // 1 DApp expressed in wei (18 decimal places)
+    
+    // to get 1 million DApp tokens, we need to add 6 more zeros
+    // 1000000000000000000000000
     uint256 public totalSupply = 1000000000000000000000000;
+    
 
     // Keep track balances and allowances approved
     mapping(address => uint256) public balanceOf;

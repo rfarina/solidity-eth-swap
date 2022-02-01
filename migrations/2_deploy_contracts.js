@@ -20,12 +20,11 @@ then use the token.transfer function to get the total supply to the ethSwap cont
     const token = await Token.deployed()
   
     // Deploy EthSwap
-    await deployer.deploy(EthSwap);
+    await deployer.deploy(EthSwap,token.address);
     const ethSwap = await EthSwap.deployed();
 
     // Transfer all tokens to EthSwap contract
     // await token.transfer(ethSwap.address, '1000000000000000000000000')
-    // let _value =  await (token.totalSupply() / 2).toString();
     await token.transfer(ethSwap.address, '1000000000000000000000000');
 
 };

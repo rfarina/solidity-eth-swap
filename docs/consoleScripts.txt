@@ -1,0 +1,4 @@
+ethSwap = await ethSwap.deployed()
+ethSwap.address
+addressType = await ethSwap.getAddressType(ethSwap.address)
+addressType

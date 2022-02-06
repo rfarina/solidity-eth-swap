@@ -8,13 +8,6 @@
             "type": "solidityMeadow",
             "request": "launch",
             "name": "Debug Solidity (via unit test run)"
-        },
-        {
-            "name": "Launch Chrome",
-            "request": "launch",
-            "type": "pwa-chrome",
-            "url": "http://localhost:5500",
-            "webRoot": "${workspaceFolder}"
         }
     ]
 }

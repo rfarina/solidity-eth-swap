@@ -2,8 +2,9 @@
 const Token = artifacts.require("Token");
 const EthSwap = artifacts.require("EthSwap");
 const ProveReference = artifacts.require("ProveReference");
+const Transfers = artifacts.require("Transfers");
 
-module.exports = async function(deployer) {
+module.exports = async function(deployer, network, accounts) {
 
 /* 
 During deployment, we have access to both instances of the token and ethSwap contracts.
@@ -27,11 +28,20 @@ Clarification:
     await deployer.deploy(EthSwap,token.address);
     const ethSwap = await EthSwap.deployed();
 
-    // Transfer all tokens to EthSwap contract
+    // Transfer all tokens to EthSwap contract (literally, minting 1M tokens)
+    // Note: this is not sending eth. It is simply populating the balanceOf mapping
+    // for the ethSwap address with 1M tokens, i.e. "balanceOf[ethSwap.address] = 1M"
+    //
+    // With that done, the ethSwap exchange now has tokens it can exchance for ether 
     await token.transfer(ethSwap.address, '1000000000000000000000000');
 
     // Deploy ProveReference
     await deployer.deploy(ProveReference, token.address);
 
+    // Deploy Transfers
+    const transfers = await deployer.deploy(Transfers, accounts[0]);
 
+    // Initialize contract with 1,000 ether
+    // Note: This tx is processed by the fallback() function
+    transfers.sendTransaction({from: accounts[1], value: '500000000000000000000' })
 };

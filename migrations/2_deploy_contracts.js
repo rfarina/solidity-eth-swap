@@ -43,5 +43,5 @@ Clarification:
 
     // Initialize contract with 1,000 ether
     // Note: This tx is processed by the fallback() function
-    transfers.sendTransaction({from: accounts[1], value: '500000000000000000000' })
+    transfers.sendTransaction({from: accounts[1], value: '5000000000000000000' })
 };

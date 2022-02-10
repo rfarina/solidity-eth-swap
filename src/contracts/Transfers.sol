@@ -27,6 +27,8 @@ contract Transfers {
 
     // fallback
     function() external payable  {
+        // Note: the following line is not needed, as the fallback automatically 
+        //       increases the contract's balance msg.value
         // address(this).balance += msg.value;
         emit DepositViaFallback(msg.sender, msg.value);
     }

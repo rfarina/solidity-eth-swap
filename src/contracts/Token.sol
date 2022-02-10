@@ -50,6 +50,19 @@ contract Token {
     /// @param _value amount value of token to send
     /// @return success as true, for transfer 
     function transfer(address _to, uint256 _value) external returns (bool success) {
+        /* 
+        rrf important note:
+        ===================
+        This token contract makes the assumption that msg.sender is the address of a 
+        calling contract.
+
+        Question?
+        =========
+        What if this function is invoked from an eoa, such as a wallet or web3 invocation?
+        A. It may still be the same... Address of eoa would be msg.sender, and it should work 
+        in the same way as if invoked from a contract.
+
+         */
         require(balanceOf[msg.sender] >= _value);
         _transfer(msg.sender, _to, _value);
         return true;
@@ -62,9 +75,9 @@ contract Token {
     // Internal function transfer can only be called by this contract
     //  Emit Transfer Event event 
     function _transfer(address _from, address _to, uint256 _value) internal {
-        // Ensure sending is to valid address! 0x0 address cane be used to burn() 
+        // Ensure sending is to valid address! 0x0 address can be used to burn() 
         require(_to != address(0));
-        require(_from != address(0));  // rrf check both from and to for address(0)
+        require(_from != address(0));  // rrf note: check both from and to for address(0)
         balanceOf[_from] = balanceOf[_from] - (_value);
         balanceOf[_to] = balanceOf[_to] + (_value);
         emit Transfer(_from, _to, _value);

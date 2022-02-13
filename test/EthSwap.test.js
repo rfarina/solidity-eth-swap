@@ -22,10 +22,11 @@ require('chai')
 //      investor: buys the DAPP tokens
 
 // contract('EthSwap', (accounts) => {
-contract('EthSwap', ([deployer, investor]) => {
+contract('EthSwap', ([deployer, investor, investor2]) => {
         let token, ethSwap
         console.log(`deployer:\n ${deployer}`);
         console.log(`investor:\n ${investor}`);
+        console.log(`investor2:\n ${investor2}`);
 
     before(async () => {
 
@@ -37,17 +38,17 @@ contract('EthSwap', ([deployer, investor]) => {
         console.log(`ethSwap address on create:\n ${token.address}`)
         
         // Balance before transfer 
-        console.log(`ethSwap balance before transfer:\n ${await token.balanceOf(ethSwap.address)}`)
+        console.log(`ethSwap token balance before transfer:\n ${await token.balanceOf(ethSwap.address)}`)
         
 
         // Transfer all tokens to ethSwap contract (1 million)
         token.transfer(ethSwap.address, tokens('1000000'))
 
         // Balance after transfer
-        console.log(`ethSwap balance after transfer:\n ${await token.balanceOf(ethSwap.address)}`)
+        console.log(`ethSwap token balance after transfer:\n ${await token.balanceOf(ethSwap.address)}`)
     })
 
-    // Helper to convert tokens to wei
+    // Helper to convert number of tokens to wei
     // Note, although we are not using ether, we can still pass it in, as we are using 18 decimals, 
     // just as in either
     function tokens(numberOfTokens) {
@@ -73,7 +74,6 @@ contract('EthSwap', ([deployer, investor]) => {
         it('eth contract has tokens', async () => {
             const balance = await token.balanceOf(ethSwap.address)
             assert.equal(balance.toString(), tokens('1000000'))
-
         })
 
         it('eth contract has reference to Token contract', async () => {
@@ -85,21 +85,67 @@ contract('EthSwap', ([deployer, investor]) => {
     })
 
     // Buy Tokens from ethSwap
-    describe('buyTokens()', async () => {
+    describe('\n\n\n\n\nbuyTokens()', async () => {
         it('Allows user to instantly purchase DAPP tokens from ethSwap', async () => {
-            console.log(`ethSwap balance before purchase\n  ${await token.balanceOf(ethSwap.address)} `);
-            console.log(`investor balance before purchase\n  ${await token.balanceOf(investor)} `);
-
-            await ethSwap.buyTokens({ from: investor, value: '1000000000000000000'})
-
-            console.log(`ethSwap balance after purchase\n  ${await token.balanceOf(ethSwap.address)} `);
-            console.log(`investor balance after purchase\n  ${await token.balanceOf(investor)} `);
+            console.log(`ethSwap contract balance of ether before purchase\n  ${await ethSwap.getEtherBalance(ethSwap.address)} `);
+            console.log(`ethSwap contract balance of tokens before purchase\n  ${await token.balanceOf(ethSwap.address)} `);
+            console.log(`investor2 account balance of tokens before purchase\n  ${await token.balanceOf(investor2)} `);
+            console.log(`investor2 account balance of ether before purchase\n  ${await ethSwap.getEtherBalance(investor2)} `);
+            
+            await ethSwap.buyTokens({ from: investor2, value: '25000000000000000000'});
+            console.log(`After purchase of 25 ether, balance of tokens should be '2500' tokens`);
+            assert.equal('2500', await token.balanceOf(investor2));
+                                                              
+            console.log(`ethSwap contract balance of ether after purchase\n  ${await ethSwap.getEtherBalance(ethSwap.address)} `);
+            console.log(`ethSwap contract balance of tokens after purchase\n  ${await token.balanceOf(ethSwap.address)} `);
+            console.log(`investor2 account balance of tokens after purchase\n  ${await token.balanceOf(investor2)} `);
+            console.log(`investor2 account balance of ether after purchase\n  ${await ethSwap.getEtherBalance(investor2)} `);
             
         })
         
         
     })
     
+    // Sell Tokens back to ethSwap
+    describe('\n\n\n\n\nsellTokens()', async () => {
+        it('Allow accounts to sell tokens back to ethSwap contract in exchange for ether', async () => {
+            // start with current balance (should be 2500 from previous transaction of buying tokens)
+            console.log(`Token balance b4 trading tokens\n ${await token.balanceOf(investor2)}`);
+            
+            before(async () => {
+                let approved;
+
+                // investor2 must approve ethSwap contract to exchange tokens on its behalf
+                // this must take place prior to invoking sellTokens(), or tx will revert.
+                approved = await token.approve(ethSwap.address, tokens('100'), {from: investor2});
+                
+                // console.log(`Was token transfer approved?\n ${approved.toString()}`);
+                assert.equal(approved.toString(), 'true');
+                
+                // sell some tokens
+                // Note: This will revert if tokens not first approved 
+                await ethSwap.sellTokens(tokens('100'), {from: investor2}); // amount in 18 decimals (150 * 10**18)
+            });
+            
+
+            // check updated balance
+            console.log(`Token balance aft trading tokens\n ${await token.balanceOf(investor2)}`);
+
+        })
+
+
+
+
+
+    })
+
+
+
+
+
+
+
+    // Determine contract vs account types
     describe('Determine account type', async () => {
         it('what is account type?', async () => {
             var accountType = await ethSwap.getAccountType(ethSwap.address);

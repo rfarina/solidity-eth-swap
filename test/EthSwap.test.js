@@ -92,7 +92,7 @@ contract('EthSwap', ([deployer, investor, investor2]) => {
             console.log(`investor2 account balance of tokens before purchase\n  ${await token.balanceOf(investor2)} `);
             console.log(`investor2 account balance of ether before purchase\n  ${await ethSwap.getEtherBalance(investor2)} `);
             
-            await ethSwap.buyTokens({ from: investor2, value: '25000000000000000000'});
+            let result = await ethSwap.buyTokens({ from: investor2, value: '25000000000000000000'});
             console.log(`After purchase of 25 ether, balance of tokens should be '2500' tokens`);
             assert.equal('2500', await token.balanceOf(investor2));
                                                               
@@ -101,6 +101,14 @@ contract('EthSwap', ([deployer, investor, investor2]) => {
             console.log(`investor2 account balance of tokens after purchase\n  ${await token.balanceOf(investor2)} `);
             console.log(`investor2 account balance of ether after purchase\n  ${await ethSwap.getEtherBalance(investor2)} `);
             
+            // Check logs to see that the event was emitted with correct data
+            console.log(result.logs[0].args);
+            const event = result.logs[0].args
+            assert.equal(event.account, investor2)
+            assert.equal(event.token, token.address)
+            assert.equal(event.amount.toString(), '2500'.toString())
+            assert.equal(event.rate.toString(), '100')
+
         })
         
         
@@ -124,7 +132,20 @@ contract('EthSwap', ([deployer, investor, investor2]) => {
                 
                 // sell some tokens
                 // Note: This will revert if tokens not first approved 
-                await ethSwap.sellTokens(tokens('100'), {from: investor2}); // amount in 18 decimals (150 * 10**18)
+                let result = await ethSwap.sellTokens(tokens('100'), {from: investor2}); // amount in 18 decimals (150 * 10**18)
+
+                // Check logs to see that the event was emitted with correct data
+                const event = result.logs[0].args
+                assert.equal(event.account, investor2)
+                assert.equal(event.token, token.address)
+                assert.equal(event.amount.toString(), tokens(100).toString())
+                assert.equal(event.rate.toString(), '100')
+
+                // Create FAILURE to ensure that failure case is handled
+                await ethSwap.sellTokens(tokens('5000'), {from: investor2}).should.be.rejected; // amount in 18 decimals (150 * 10**18)
+
+
+
             });
             
 

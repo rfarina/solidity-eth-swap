@@ -25,6 +25,19 @@ contract EthSwap {
 
     uint256 public ratePerToken = 100; // 100 DAPP for 1 ether
 
+    event TokensPurchased (
+        address account,
+        address token,
+        uint amount,
+        uint rate
+    );
+    event TokensSold (
+        address account,
+        address token,
+        uint amount,
+        uint rate
+    );
+
     constructor(Token _token) public {
         token = _token;
 
@@ -49,6 +62,9 @@ contract EthSwap {
         // Invoke the transaction on the Token contract
         token.transfer(msg.sender, tokensPurchased);    
 
+        // emit event allowing subcribers to be aware of the purchase
+        emit TokensPurchased(msg.sender, address(token), tokensPurchased, ratePerToken);
+
         /* 
         rrf note:
         =========
@@ -67,6 +83,16 @@ contract EthSwap {
 
             uint256 ethOwed = (numberOfTokensToSell / ratePerToken);
 
+
+            // rrf note: the following requires are actually accounted for in the underlying ERC20 token functions.
+            // this is being done as a learning excercise, as both requires will need to be satisfied for the tx to take place.
+
+            // Require user has enough tokens to sell, else revert
+            require(token.balanceOf(msg.sender) >= numberOfTokensToSell, 'Not enough tokens in account');
+
+            // Require that contract has enough ether to support the transaction, else revert
+            require(address(this).balance >= ethOwed, 'Not enough ether in account');
+
             // transfer tokens from msg.sender to this contract
             // token.transfer(msg.sender, numberOfTokensToTrade);  // this function is not the correct one to invoke
             token.transferFrom(msg.sender, address(this), numberOfTokensToSell );  // this function transfers token balance to the contract
@@ -74,6 +100,10 @@ contract EthSwap {
 
             // transfer ether from this contract to msg.sender
             msg.sender.transfer(ethOwed); // Contract sending ether to msg.sender
+
+
+            // emit event allowing subcribers to be aware of the purchase
+            emit TokensSold(msg.sender, address(token), numberOfTokensToSell, ratePerToken);
 
         }
 

@@ -16,7 +16,7 @@ class App extends Component {
     const web3 = window.web3 // shortcut for full name
 
     const accounts = await web3.eth.getAccounts()
-    // console.log(accounts[0])  // account to be stored in React state
+    console.log(`Accounts\n ${accounts}`)  // account to be stored in React state
     this.setState({account: accounts[0]})
     // console.log(`account from state\n ${this.state.account}`)
     const ethBalance = await web3.eth.getBalance(this.state.account)

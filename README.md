@@ -31,7 +31,7 @@ Metamask: [https://metamask.io/](https://metamask.io/)
 
 git clone [git@github.com](mailto:git@github.com):rfarina/solidity-eth-swap.git eth-swap
 
-truffle init
+truffle -g install
 
 npm install
 

@@ -1,8 +1,6 @@
 
 const Token = artifacts.require("Token");
 const EthSwap = artifacts.require("EthSwap");
-const ProveReference = artifacts.require("ProveReference");
-const Transfers = artifacts.require("Transfers");
 
 module.exports = async function(deployer, network, accounts) {
 
@@ -35,13 +33,5 @@ Clarification:
     // With that done, the ethSwap exchange now has tokens it can exchance for ether 
     await token.transfer(ethSwap.address, '1000000000000000000000000');
 
-    // Deploy ProveReference
-    await deployer.deploy(ProveReference, token.address);
 
-    // Deploy Transfers
-    const transfers = await deployer.deploy(Transfers, accounts[0]);
-
-    // Initialize contract with 1,000 ether
-    // Note: This tx is processed by the fallback() function
-    transfers.sendTransaction({from: accounts[1], value: '5000000000000000000' })
 };

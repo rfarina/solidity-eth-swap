@@ -12,9 +12,11 @@ Eth-Swap was developed using Solidity and the Truffle Suite, and is deployed to 
 
 All functional testing was performed manually in the Truffle Console using the web3 javascript API.  Unit tests were implemented with the mocha framework and chai assertion library.
 
+
 # Goals
 
 Implement the ERC20 Standard using Solidity and the Truffle Suite
+
 
 ## **Dependencies**
 
@@ -31,13 +33,26 @@ Metamask: [https://metamask.io/](https://metamask.io/)
 
 git clone [git@github.com](mailto:git@github.com):rfarina/solidity-eth-swap.git eth-swap
 
-truffle -g install
+npm install -g truffle@5.1.39
 
 npm install
 
-Install and run ganache to establish the Blockchain for local testing
+Download, Install and run ganache to establish the Blockchain for local testing
 
 [https://trufflesuite.com/ganache/](https://trufflesuite.com/ganache/)
+
+
+## **Test truffle installation**
+
+truffle version (should result in the following):
+
+Truffle v5.1.39 (core: 5.1.39)
+
+Solidity - 0.5.16 (solc-js)
+
+Node v14.16.0
+
+Web3.js v1.2.1
 
 
 ## **Compilation**
@@ -54,10 +69,10 @@ truffle test
 
 ## **Deployment to Ganache**
 
-truffle migrate ---reset
+truffle migrate ---reset (should result in Accounts created and Contracts deployed to Ganache)
 
 
-# ATTRIBUTIONS
+# Attributions
 
 Prior to modification, this repo was originally cloned from DappUniversity.com at [https://github.com/dappuniversity/eth_swap](https://github.com/dappuniversity/eth_swap)
 

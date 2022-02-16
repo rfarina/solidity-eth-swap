@@ -12,6 +12,9 @@ Eth-Swap was developed using Solidity and the Truffle Suite, and is deployed to 
 
 All functional testing was performed manually in the Truffle Console using the web3 javascript API.  Unit tests were implemented with the mocha framework and chai assertion library.
 
+# Goals
+
+Implement the ERC20 Standard using Solidity and the Truffle Suite
 
 ## **Dependencies**
 
@@ -52,11 +55,6 @@ truffle test
 ## **Deployment to Ganache**
 
 truffle migrate ---reset
-
-
-# GOALS
-
-Implement the ERC20 Standard using Solidity and the Truffle Suite
 
 
 # ATTRIBUTIONS

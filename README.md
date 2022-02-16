@@ -33,7 +33,7 @@ git clone [git@github.com](mailto:git@github.com):rfarina/solidity-eth-swap.git 
 
 truffle init
 
-npm init
+npm install
 
 Install and run ganache to establish the Blockchain for local testing
 

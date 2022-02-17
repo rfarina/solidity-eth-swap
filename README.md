@@ -11,7 +11,7 @@ Eth-Swap is a Web 3 Distributed Exchange application that mints 1,000,000 ERC20 
 
 Eth-Swap was developed using Solidity and the Truffle Suite, and is deployed to a local Ganache Blockchain. Eth-Swap can also be deployed to the Ethereum Blockchain on Mainnet once security audits have been completed and the application is shown to be production ready.
 
-All functional testing was performed manually in the Truffle Console using the web3 javascript API.  Unit tests were implemented with the mocha framework and chai assertion library.
+All functional testing were performed manually in the Truffle Console using the web3 javascript API.  Unit tests were implemented with the mocha framework and chai assertion library.
 
 
 ## **Goals**

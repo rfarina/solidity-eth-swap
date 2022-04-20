@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.5.16;
+pragma solidity ^0.8.0;
 
 // pragma solidity ^0.8.6;
 
@@ -9,7 +9,7 @@ pragma solidity ^0.5.16;
 /// @title ERC20 Contract 
 
 /* 
-Token.sol will generate tokens for itself. 
+Token.sol will generate (mint) tokens for itself. 
 But our objective is to transfer the tokens created to the EthSwap contract. This will be done
 in the 2_deploy_contracts.js file. 
 */
@@ -23,7 +23,7 @@ contract Token {
     
     // Note 1 wei is 18 decimal places 
     // 1000000000000000000       // 1 DApp expressed in wei (18 decimal places)
-    
+
     // to get 1 million DApp tokens, we need to add 6 more zeros
     // 1000000000000000000000000
     uint256 public totalSupply = 1000000000000000000000000;
@@ -37,12 +37,12 @@ contract Token {
     event Transfer(address indexed from, address indexed to, uint256 value);
     event Approval(address indexed owner, address indexed spender, uint256 value);
 
-    constructor() public {
+    constructor() payable {   // why is payable needed?  //TODO
         // name = _name;
         // symbol = _symbol;
         // decimals = _decimals;
         // totalSupply = _totalSupply; 
-        balanceOf[msg.sender] = totalSupply;
+        balanceOf[payable(msg.sender)] = totalSupply;  // why is payable needed?
     }
 
     /// @notice transfer amount of tokens to an address
@@ -59,9 +59,13 @@ contract Token {
         Question?
         =========
         What if this function is invoked from an eoa, such as a wallet or web3 invocation?
-        A. It may still be the same... Address of eoa would be msg.sender, and it should work 
-        in the same way as if invoked from a contract.
+        A. It may still be the same... Address of eoa would be msg.sender, and it should work.
 
+        But, if a contract is invoking transfer, then msg.sender is the contract, not the eoa (not tx.origin) 
+
+        This makes for an interesting case. If ContractA calls ContractB; and ContractB calls transfer, then ContractB
+        becomes msg.sender. And it is ContractB's tokens that will be transfered to the "to" address. AND, ContractA will
+        receive the ether!!  Bad deal for ContractB!
          */
         require(balanceOf[msg.sender] >= _value);
         _transfer(msg.sender, _to, _value);

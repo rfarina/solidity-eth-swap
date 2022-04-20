@@ -1,4 +1,4 @@
-
+// const { artifacts } = require("truffle");
 const Token = artifacts.require("Token");
 const EthSwap = artifacts.require("EthSwap");
 
@@ -30,8 +30,9 @@ Clarification:
     // Note: this is not sending eth. It is simply populating the balanceOf mapping
     // for the ethSwap address with 1M tokens, i.e. "balanceOf[ethSwap.address] = 1M"
     //
-    // With that done, the ethSwap exchange now has tokens it can exchance for ether 
+    // With that done, the ethSwap exchange now has tokens it can exchange for ether 
     await token.transfer(ethSwap.address, '1000000000000000000000000');
+    console.log(`ethSwap token balance after deployment (s/b 1M)[from 2_deploy_contracts.js]\n ${await token.balanceOf(ethSwap.address)}`);
 
 
 };

@@ -1,3 +1,4 @@
+[![MythXBadge](https://badgen.net/https/api.mythx.io/v1/projects/2dda122a-917f-4fe5-b516-413518b290b3/badge/data?cache=300&icon=https://raw.githubusercontent.com/ConsenSys/mythx-github-badge/main/logo_white.svg)](https://docs.mythx.io/dashboard/github-badges)
 # Solidity Eth-Swap Contract
 
 
@@ -10,7 +11,7 @@ Eth-Swap is a Web 3 Distributed Exchange application that mints 1,000,000 ERC20 
 
 Eth-Swap was developed using Solidity and the Truffle Suite, and is deployed to a local Ganache Blockchain. Eth-Swap can also be deployed to the Ethereum Blockchain on Mainnet once security audits have been completed and the application is shown to be production ready.
 
-All functional testing was performed manually in the Truffle Console using the web3 javascript API.  Unit tests were implemented with the mocha framework and chai assertion library.
+All functional testing were performed manually in the Truffle Console using the web3 javascript API.  Unit tests were implemented with the mocha framework and chai assertion library.
 
 
 ## **Goals**
